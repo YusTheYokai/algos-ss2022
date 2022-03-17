@@ -2,17 +2,20 @@ package at.technikumwien.hashtable;
 
 public class Hashtable<T> {
 
-    final static int P = 31;
-    final static int M = 1000000007;
+    static final int P = 31;
+    static final int M = 1000000007;
 
-    private Object[] arr;
+    private Value[] values;
 
     // //////////////////////////////////////////////////////////////////////////
     // Init
     // //////////////////////////////////////////////////////////////////////////
 
     public Hashtable(int size) {
-        arr = new Object[size];
+        values = new Value[size];
+        for (int i = 0; i < size; i++) {
+            values[i] = new Value();
+        }
     }
 
     // //////////////////////////////////////////////////////////////////////////
@@ -20,11 +23,23 @@ public class Hashtable<T> {
     // //////////////////////////////////////////////////////////////////////////
 
     public void add(String key, T t) {
-        arr[key.hashCode() % arr.length] = t;
+        values[key.hashCode() % values.length].setV(t);
     }
 
+    @SuppressWarnings("unchecked")
     public T get(String key) {
-        return (T) arr[key.hashCode() % arr.length];
+        return (T) getValue(key).getV();
+    }
+
+    public T delete(String key) {
+        T deleted = get(key);
+        Value value = getValue(key);
+        value.setV(null);
+        return deleted;
+    }
+
+    private Value getValue(String key) {
+        return values[key.hashCode() % values.length];
     }
 
     private int hash(String key) {
