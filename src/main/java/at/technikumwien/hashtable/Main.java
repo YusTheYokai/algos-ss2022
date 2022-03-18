@@ -21,5 +21,11 @@ public class Main {
         stockHashtable.delete(stringHashtable.delete(s.getName()));
         System.out.println(stringHashtable.get(s.getName()));
         System.out.println(stockHashtable.get(s.getAbbreviation()));
+        
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        Hashtable<String> hashtable = new Hashtable<>(4);
+        hashtable.add("test", "string1");
+        hashtable.add("key1", "meineKatze");
     }
 }
