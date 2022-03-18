@@ -1,0 +1,13 @@
+package at.technikumwien.hashtable.command;
+
+public class UnknownCommand implements Runnable {
+
+    // //////////////////////////////////////////////////////////////////////////
+    // Methoden
+    // //////////////////////////////////////////////////////////////////////////
+
+    @Override
+    public void run() {
+        System.out.println("Command unknown.");
+    }
+}
