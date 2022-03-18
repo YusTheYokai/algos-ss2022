@@ -1,5 +1,7 @@
 package at.technikumwien.hashtable;
 
+import java.util.Scanner;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -21,11 +23,28 @@ public class Main {
         stockHashtable.delete(stringHashtable.delete(s.getName()));
         System.out.println(stringHashtable.get(s.getName()));
         System.out.println(stockHashtable.get(s.getAbbreviation()));
-        
+
         /////////////////////////////////////////////////////////////////////////////////////
 
         Hashtable<String> hashtable = new Hashtable<>(4);
         hashtable.add("test", "string1");
         hashtable.add("key1", "meineKatze");
+
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        Scanner scanner = new Scanner(System.in);
+
+        boolean con = true;
+        while (con) {
+            System.out.println(":");
+            String input = scanner.nextLine();
+            if (input.equalsIgnoreCase("quit")) {
+                con = false;
+            } else {
+                System.out.println("Such a command does not exist.");
+            }
+        }
+
+        scanner.close();
     }
 }
