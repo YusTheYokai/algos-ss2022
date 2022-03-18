@@ -23,7 +23,21 @@ public class Hashtable<T> {
     // //////////////////////////////////////////////////////////////////////////
 
     public void add(String key, T t) {
-        values[key.hashCode() % values.length].setV(t);
+        int hash = key.hashCode();
+        Value value = values[hash % values.length];
+        if (value.getV() == null) {
+            value.setV(t);
+        } else {
+            values[probing(hash) % values.length].setV(t);
+        }
+    }
+
+    private int probing(int hash) {
+        int k = 1;
+        while (values[(hash + k * k) % values.length].getV() != null) {
+            k++;
+        }
+        return hash + k * k;
     }
 
     @SuppressWarnings("unchecked")
