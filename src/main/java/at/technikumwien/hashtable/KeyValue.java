@@ -1,20 +1,29 @@
 package at.technikumwien.hashtable;
 
-public class Value {
+public class KeyValue {
 
-    private Object v;
+    private String key;
+    private Object value;
     private boolean deleted;
 
     // //////////////////////////////////////////////////////////////////////////
     // Getter und Setter
     // //////////////////////////////////////////////////////////////////////////
 
-    public Object getV() {
-        return v;
+    public String getKey() {
+        return key;
     }
 
-    public void setV(Object v) {
-        this.v = v;
+    public void setKey(String key) {
+        this.key = key;
+    }
+    
+    public Object getValue() {
+        return value;
+    }
+
+    public void setValue(Object v) {
+        this.value = v;
         deleted = v == null;
     }
 
