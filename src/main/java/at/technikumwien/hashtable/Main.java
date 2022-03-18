@@ -2,49 +2,34 @@ package at.technikumwien.hashtable;
 
 import java.util.Scanner;
 
+import at.technikumwien.hashtable.command.AddCommand;
+import at.technikumwien.hashtable.command.QuitCommand;
+import at.technikumwien.hashtable.command.UnknownCommand;
+
 public class Main {
 
+    private static boolean quit = false;
+
     public static void main(String[] args) {
-        Stock s = new Stock("MSFT", "Microsoft Corporation", "MSFT");
-        Hashtable<Stock> stockHashtable = new Hashtable<>(2003);
-        Hashtable<String> stringHashtable = new Hashtable<>(2003);
+        final Hashtable<String> abbrHashtable = new Hashtable<>(2003);
+        final Hashtable<Stock> stockHashtable = new Hashtable<>(2003);
+        final Scanner scanner = new Scanner(System.in);
 
-        // Mapped den Namen auf das Kürzel
-        //            Microsoft  -> MSFT
-        stringHashtable.add(s.getName(), s.getAbbreviation());
-
-        // Mapped das Kürzel auf das Stock Objekt
-        //            MSFT        -> s
-        stockHashtable.add(s.getAbbreviation(), s);
-
-        System.out.println(stockHashtable.get(s.getAbbreviation()).getName());
-        System.out.println(stockHashtable.get(stringHashtable.get(s.getName())).getAbbreviation());
-
-        stockHashtable.delete(stringHashtable.delete(s.getName()));
-        System.out.println(stringHashtable.get(s.getName()));
-        System.out.println(stockHashtable.get(s.getAbbreviation()));
-
-        /////////////////////////////////////////////////////////////////////////////////////
-
-        Hashtable<String> hashtable = new Hashtable<>(4);
-        hashtable.add("test", "string1");
-        hashtable.add("key1", "meineKatze");
-
-        /////////////////////////////////////////////////////////////////////////////////////
-
-        Scanner scanner = new Scanner(System.in);
-
-        boolean con = true;
-        while (con) {
-            System.out.println(":");
+        while (!quit) {
+            Runnable command = new UnknownCommand();
             String input = scanner.nextLine();
-            if (input.equalsIgnoreCase("quit")) {
-                con = false;
-            } else {
-                System.out.println("Such a command does not exist.");
+            if (input.equalsIgnoreCase("add")) {
+                command = new AddCommand(abbrHashtable, stockHashtable, scanner);
+            } else if (input.equalsIgnoreCase("quit")) {
+                command = new QuitCommand(Main::setQuit);
             }
+            command.run();
         }
 
         scanner.close();
+    }
+
+    private static void setQuit(boolean q) {
+        quit = q;
     }
 }
