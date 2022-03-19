@@ -1,22 +1,20 @@
 package at.technikumwien.hashtable;
 
-import javax.annotation.Nullable;
-
 public class Hashtable<T> {
 
     static final int P = 31;
     static final int M = 1000000007;
 
-    private KeyValue[] values;
+    private KeyValue[] keyValues;
 
     // //////////////////////////////////////////////////////////////////////////
     // Init
     // //////////////////////////////////////////////////////////////////////////
 
     public Hashtable(int size) {
-        values = new KeyValue[size];
+        keyValues = new KeyValue[size];
         for (int i = 0; i < size; i++) {
-            values[i] = new KeyValue();
+            keyValues[i] = new KeyValue();
         } 
     }
 
@@ -26,9 +24,9 @@ public class Hashtable<T> {
 
     public void add(String key, T t) {
         int hash = key.hashCode();
-        KeyValue keyValue = values[hash % values.length];
+        KeyValue keyValue = keyValues[hash % keyValues.length];
         if (keyValue.getKey() != null) {
-            keyValue = values[probing(hash) % values.length];
+            keyValue = keyValues[probing(hash) % keyValues.length];
         }
         keyValue.setKey(key);
         keyValue.setValue(t);
@@ -36,7 +34,7 @@ public class Hashtable<T> {
 
     private int probing(int hash) {
         int k = 1;
-        while (values[(hash + k * k) % values.length].getValue() != null) {
+        while (keyValues[(hash + k * k) % keyValues.length].getValue() != null) {
             k++;
         }
         return hash + k * k;
@@ -69,7 +67,7 @@ public class Hashtable<T> {
         int hash = key.hashCode();
         int k = 0;
         KeyValue keyValue;
-        while (!key.equals((keyValue = values[(hash + k * k) % values.length]).getKey()) 
+        while (!key.equals((keyValue = keyValues[(hash + k * k) % keyValues.length]).getKey()) 
                 && (keyValue.getKey() != null || keyValue.isDeleted()))  {
             k++;
         }
