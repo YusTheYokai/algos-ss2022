@@ -6,6 +6,7 @@ import at.technikumwien.hashtable.command.AddCommand;
 import at.technikumwien.hashtable.command.DelCommand;
 import at.technikumwien.hashtable.command.ImportCommand;
 import at.technikumwien.hashtable.command.QuitCommand;
+import at.technikumwien.hashtable.command.SaveCommand;
 import at.technikumwien.hashtable.command.UnknownCommand;
 
 public class Main {
@@ -28,6 +29,8 @@ public class Main {
                 command = new DelCommand(abbrHashtable, stockHashtable, scanner);
             } else if (input.equalsIgnoreCase("import")) {
                 command = new ImportCommand(abbrHashtable, stockHashtable, scanner);
+            } else if (input.equalsIgnoreCase("save")) {
+                command = new SaveCommand(abbrHashtable, stockHashtable, scanner);
             }
             command.run();
         }
