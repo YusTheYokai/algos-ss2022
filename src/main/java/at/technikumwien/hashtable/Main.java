@@ -10,6 +10,7 @@ import at.technikumwien.hashtable.command.AddCommand;
 import at.technikumwien.hashtable.command.DelCommand;
 import at.technikumwien.hashtable.command.ImportCommand;
 import at.technikumwien.hashtable.command.LoadCommand;
+import at.technikumwien.hashtable.command.PlotCommand;
 import at.technikumwien.hashtable.command.QuitCommand;
 import at.technikumwien.hashtable.command.SaveCommand;
 import at.technikumwien.hashtable.command.SearchCommand;
@@ -43,6 +44,8 @@ public class Main {
                 command = new LoadCommand(Main::setAbbrHashtable, Main::setStockHashtable, scanner, gson);
             } else if (input.equalsIgnoreCase("search")) {
                 command = new SearchCommand(abbrHashtable, stockHashtable, scanner);
+            } else if (input.equalsIgnoreCase("plot")) {
+                command = new PlotCommand(abbrHashtable, stockHashtable, scanner);
             }
             command.run();
         }
