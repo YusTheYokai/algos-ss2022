@@ -1,21 +1,27 @@
 package at.technikumwien.hashtable;
 
+import java.time.LocalDate;
 import java.util.Scanner;
 
 import at.technikumwien.hashtable.command.AddCommand;
 import at.technikumwien.hashtable.command.DelCommand;
 import at.technikumwien.hashtable.command.ImportCommand;
+import at.technikumwien.hashtable.command.LoadCommand;
 import at.technikumwien.hashtable.command.QuitCommand;
 import at.technikumwien.hashtable.command.SaveCommand;
 import at.technikumwien.hashtable.command.UnknownCommand;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 public class Main {
 
+    private static final Gson gson = new GsonBuilder().setPrettyPrinting().registerTypeAdapter(LocalDate.class, new LocalDateAdapter()).create();
+
+    private static Hashtable<String, String> abbrHashtable = new Hashtable<>(2003);
+    private static Hashtable<String, Stock> stockHashtable = new Hashtable<>(2003);
     private static boolean quit = false;
 
     public static void main(String[] args) {
-        final Hashtable<String> abbrHashtable = new Hashtable<>(2003);
-        final Hashtable<Stock> stockHashtable = new Hashtable<>(2003);
         final Scanner scanner = new Scanner(System.in);
 
         while (!quit) {
@@ -30,12 +36,22 @@ public class Main {
             } else if (input.equalsIgnoreCase("import")) {
                 command = new ImportCommand(abbrHashtable, stockHashtable, scanner);
             } else if (input.equalsIgnoreCase("save")) {
-                command = new SaveCommand(abbrHashtable, stockHashtable, scanner);
+                command = new SaveCommand(abbrHashtable, stockHashtable, scanner, gson);
+            } else if (input.equalsIgnoreCase("load")) {
+                command = new LoadCommand(Main::setAbbrHashtable, Main::setStockHashtable, scanner, gson);
             }
             command.run();
         }
 
         scanner.close();
+    }
+
+    private static void setAbbrHashtable(Hashtable<String, String> ah) {
+        abbrHashtable = ah;
+    }
+
+    private static void setStockHashtable(Hashtable<String, Stock> sh) {
+        stockHashtable = sh;
     }
 
     private static void setQuit(boolean q) {
