@@ -15,7 +15,7 @@ public class Hashtable<T> {
         keyValues = new KeyValue[size];
         for (int i = 0; i < size; i++) {
             keyValues[i] = new KeyValue();
-        } 
+        }
     }
 
     // //////////////////////////////////////////////////////////////////////////

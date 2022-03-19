@@ -1,11 +1,14 @@
 package at.technikumwien.hashtable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Stock {
 
     private final String id;
     private final String name;
     private final String abbreviation;
-    private final History[] histories = new History[30];
+    private List<History> histories = new ArrayList<>();
 
     // //////////////////////////////////////////////////////////////////////////
     // Init
@@ -33,7 +36,11 @@ public class Stock {
         return abbreviation;
     }
 
-    public History[] getHistories() {
+    public List<History> getHistories() {
         return histories;
+    }
+
+    public void setHistories(List<History> histories) {
+        this.histories = histories;
     }
 }
