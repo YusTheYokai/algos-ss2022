@@ -7,15 +7,15 @@ import at.technikumwien.hashtable.Stock;
 
 public class AddCommand implements Runnable {
 
-    private final Hashtable<String> abbrHashtable;
-    private final Hashtable<Stock> stockHashtable;
+    private final Hashtable<String, String> abbrHashtable;
+    private final Hashtable<String, Stock> stockHashtable;
     private final Scanner scanner;
 
     // //////////////////////////////////////////////////////////////////////////
     // Init
     // //////////////////////////////////////////////////////////////////////////
 
-    public AddCommand(Hashtable<String> abbrHashtable, Hashtable<Stock> stockHashtable, Scanner scanner) {
+    public AddCommand(Hashtable<String, String> abbrHashtable, Hashtable<String, Stock> stockHashtable, Scanner scanner) {
         this.abbrHashtable = abbrHashtable;
         this.stockHashtable = stockHashtable;
         this.scanner = scanner;

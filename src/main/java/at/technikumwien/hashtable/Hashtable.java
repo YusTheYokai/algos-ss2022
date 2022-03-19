@@ -1,20 +1,21 @@
 package at.technikumwien.hashtable;
 
-public class Hashtable<T> {
+public class Hashtable<K, V> {
 
     static final int P = 31;
     static final int M = 1000000007;
 
-    private KeyValue[] keyValues;
+    private KeyValue<K, V>[] keyValues;
 
     // //////////////////////////////////////////////////////////////////////////
     // Init
     // //////////////////////////////////////////////////////////////////////////
 
+    @SuppressWarnings("unchecked")
     public Hashtable(int size) {
         keyValues = new KeyValue[size];
         for (int i = 0; i < size; i++) {
-            keyValues[i] = new KeyValue();
+            keyValues[i] = new KeyValue<>();
         }
     }
 
@@ -22,14 +23,14 @@ public class Hashtable<T> {
     // Methoden
     // //////////////////////////////////////////////////////////////////////////
 
-    public void add(String key, T t) {
+    public void add(K key, V value) {
         int hash = key.hashCode();
-        KeyValue keyValue = keyValues[hash % keyValues.length];
+        var keyValue = keyValues[hash % keyValues.length];
         if (keyValue.getKey() != null) {
             keyValue = keyValues[probing(hash) % keyValues.length];
         }
         keyValue.setKey(key);
-        keyValue.setValue(t);
+        keyValue.setValue(value);
     }
 
     private int probing(int hash) {
@@ -40,33 +41,31 @@ public class Hashtable<T> {
         return hash + k * k;
     }
 
-    @SuppressWarnings("unchecked")
-    public T get(String key) {
-        KeyValue keyValue = getKeyValue(key);
+    public V get(String key) {
+        var keyValue = getKeyValue(key);
         if (keyValue == null) {
             return null;
         }
 
-        return (T) keyValue.getValue();
+        return keyValue.getValue();
     }
 
-    @SuppressWarnings("unchecked")
-    public T delete(String key) {
-        KeyValue keyValue = getKeyValue(key);
+    public V delete(String key) {
+        var keyValue = getKeyValue(key);
         if (keyValue == null) {
             return null;
         }
 
-        T deleted = (T) keyValue.getValue();
+        V deleted = keyValue.getValue();
         keyValue.setKey(null);
         keyValue.setValue(null);
         return deleted;
     }
 
-    private KeyValue getKeyValue(String key) {
+    private KeyValue<K, V> getKeyValue(String key) {
         int hash = key.hashCode();
         int k = 0;
-        KeyValue keyValue;
+        KeyValue<K, V> keyValue;
         while (!key.equals((keyValue = keyValues[(hash + k * k) % keyValues.length]).getKey()) 
                 && (keyValue.getKey() != null || keyValue.isDeleted()))  {
             k++;
@@ -75,17 +74,5 @@ public class Hashtable<T> {
             return keyValue;
         }
         return null;
-    }
-
-    private int hash(String key) {
-        int h = 0;
-        final char[] chars = key.toCharArray();
-        long exp = 1;
-        final int n = chars.length;
-        for (int i = 0; i < n; i++) {
-            h = (int)((h + (chars[i] - 'a' + 1) * exp) % M);
-            exp = (exp * P) % M; 
-        }
-        return h;
     }
 }
