@@ -1,6 +1,7 @@
 package at.technikumwien.hashtable;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class History implements Comparable<History> {
 
@@ -37,6 +38,13 @@ public class History implements Comparable<History> {
         }
 
         return date.equals(((History) obj).date);
+    }
+
+    @Override
+    public String toString() {
+        return "date: " + date.format(DateTimeFormatter.ISO_LOCAL_DATE) + " | open: " + open + 
+                " | max: " + max + " | min: " + min + " | close: " + close + 
+                " | adjusted close: " + adjustedClose + " | volume: " + volume;
     }
 
     @Override

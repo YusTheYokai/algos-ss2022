@@ -3,15 +3,17 @@ package at.technikumwien.hashtable;
 import java.time.LocalDate;
 import java.util.Scanner;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import at.technikumwien.hashtable.command.AddCommand;
 import at.technikumwien.hashtable.command.DelCommand;
 import at.technikumwien.hashtable.command.ImportCommand;
 import at.technikumwien.hashtable.command.LoadCommand;
 import at.technikumwien.hashtable.command.QuitCommand;
 import at.technikumwien.hashtable.command.SaveCommand;
+import at.technikumwien.hashtable.command.SearchCommand;
 import at.technikumwien.hashtable.command.UnknownCommand;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 public class Main {
 
@@ -39,6 +41,8 @@ public class Main {
                 command = new SaveCommand(abbrHashtable, stockHashtable, scanner, gson);
             } else if (input.equalsIgnoreCase("load")) {
                 command = new LoadCommand(Main::setAbbrHashtable, Main::setStockHashtable, scanner, gson);
+            } else if (input.equalsIgnoreCase("search")) {
+                command = new SearchCommand(abbrHashtable, stockHashtable, scanner);
             }
             command.run();
         }
