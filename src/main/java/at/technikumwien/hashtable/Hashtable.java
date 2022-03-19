@@ -15,6 +15,9 @@ public class Hashtable<T> {
 
     public Hashtable(int size) {
         values = new KeyValue[size];
+        for (int i = 0; i < size; i++) {
+            values[i] = new KeyValue();
+        } 
     }
 
     // //////////////////////////////////////////////////////////////////////////
@@ -23,12 +26,12 @@ public class Hashtable<T> {
 
     public void add(String key, T t) {
         int hash = key.hashCode();
-        KeyValue value = values[hash % values.length];
-        if (value.getValue() == null) {
-            value.setValue(t);
-        } else {
-            values[probing(hash) % values.length].setValue(t);
+        KeyValue keyValue = values[hash % values.length];
+        if (keyValue.getKey() != null) {
+            keyValue = values[probing(hash) % values.length];
         }
+        keyValue.setKey(key);
+        keyValue.setValue(t);
     }
 
     private int probing(int hash) {
@@ -41,13 +44,23 @@ public class Hashtable<T> {
 
     @SuppressWarnings("unchecked")
     public T get(String key) {
-        return (T) getKeyValue(key).getValue();
+        KeyValue keyValue = getKeyValue(key);
+        if (keyValue == null) {
+            return null;
+        }
+
+        return (T) keyValue.getValue();
     }
 
     @SuppressWarnings("unchecked")
     public T delete(String key) {
         KeyValue keyValue = getKeyValue(key);
+        if (keyValue == null) {
+            return null;
+        }
+
         T deleted = (T) keyValue.getValue();
+        keyValue.setKey(null);
         keyValue.setValue(null);
         return deleted;
     }
@@ -56,11 +69,14 @@ public class Hashtable<T> {
         int hash = key.hashCode();
         int k = 0;
         KeyValue keyValue;
-        while ((keyValue = values[(hash + k * k) % values.length]) != null && 
-                !keyValue.getKey().equals(key)) {
+        while (!key.equals((keyValue = values[(hash + k * k) % values.length]).getKey()) 
+                && (keyValue.getKey() != null || keyValue.isDeleted()))  {
             k++;
         }
-        return keyValue;
+        if (key.equals(keyValue.getKey())) {
+            return keyValue;
+        }
+        return null;
     }
 
     private int hash(String key) {

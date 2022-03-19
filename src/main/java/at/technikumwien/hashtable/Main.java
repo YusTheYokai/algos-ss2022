@@ -3,6 +3,7 @@ package at.technikumwien.hashtable;
 import java.util.Scanner;
 
 import at.technikumwien.hashtable.command.AddCommand;
+import at.technikumwien.hashtable.command.DelCommand;
 import at.technikumwien.hashtable.command.QuitCommand;
 import at.technikumwien.hashtable.command.UnknownCommand;
 
@@ -22,6 +23,8 @@ public class Main {
                 command = new AddCommand(abbrHashtable, stockHashtable, scanner);
             } else if (input.equalsIgnoreCase("quit")) {
                 command = new QuitCommand(Main::setQuit);
+            } else if (input.equalsIgnoreCase("del")) {
+                command = new DelCommand(abbrHashtable, stockHashtable, scanner);
             }
             command.run();
         }
