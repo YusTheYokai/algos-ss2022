@@ -25,9 +25,9 @@ public class Hashtable<K, V> {
 
     public void add(K key, V value) {
         int hash = key.hashCode();
-        var keyValue = keyValues[hash % keyValues.length];
+        var keyValue = keyValues[Math.abs(hash) % keyValues.length];
         if (keyValue.getKey() != null) {
-            keyValue = keyValues[probing(hash) % keyValues.length];
+            keyValue = keyValues[Math.abs(probing(hash)) % keyValues.length];
         }
         keyValue.setKey(key);
         keyValue.setValue(value);
@@ -66,7 +66,7 @@ public class Hashtable<K, V> {
         int hash = key.hashCode();
         int k = 0;
         KeyValue<K, V> keyValue;
-        while (!key.equals((keyValue = keyValues[(hash + k * k) % keyValues.length]).getKey()) 
+        while (!key.equals((keyValue = keyValues[Math.abs(hash + k * k) % keyValues.length]).getKey()) 
                 && (keyValue.getKey() != null || keyValue.isDeleted()))  {
             k++;
         }
