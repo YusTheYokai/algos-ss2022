@@ -27,11 +27,11 @@ public class AddCommand implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("Name:");
+        System.out.print("Name: ");
         String name = scanner.nextLine();
-        System.out.println("Abbreviation:");
+        System.out.print("Abbreviation: ");
         String abbreviation = scanner.nextLine();
-        System.out.println("ID:");
+        System.out.print("ID: ");
         String id = scanner.nextLine();
 
         Stock stock = new Stock(id, name, abbreviation);
