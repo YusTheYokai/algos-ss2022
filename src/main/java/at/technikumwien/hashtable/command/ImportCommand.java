@@ -37,7 +37,7 @@ public class ImportCommand implements Runnable {
     public void run() {
         Stock stock = askForStock();
         if (stock == null) {
-            System.err.println("Stock does not exist!");
+            System.err.println("No such stock");
             return;
         }
 
@@ -54,7 +54,7 @@ public class ImportCommand implements Runnable {
     }
 
     private Stock askForStock() {
-        System.out.println("For stock (name/abbreviation):");
+        System.out.print("For stock (name/abbreviation): ");
         String key = scanner.nextLine();
 
         String abbr = abbrHashtable.get(key);
@@ -62,9 +62,9 @@ public class ImportCommand implements Runnable {
     }
 
     private List<String> askForFile() throws IOException {
-        System.out.println("Relative path to file:");
+        System.out.print("Relative path to file (____.csv): ");
         String path = scanner.nextLine();
-        return Files.readAllLines(Path.of(path));
+        return Files.readAllLines(Path.of(path + ".csv"));
     }
 
     private List<History> linesToHistories(List<String> lines) throws NumberFormatException {

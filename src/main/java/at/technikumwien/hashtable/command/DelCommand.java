@@ -27,7 +27,7 @@ public class DelCommand implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("Name/Abbreviation:");
+        System.out.print("Name/Abbreviation: ");
         String key = scanner.nextLine();
 
         String abbr = abbrHashtable.delete(key);

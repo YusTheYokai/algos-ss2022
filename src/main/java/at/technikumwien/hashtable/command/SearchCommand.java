@@ -23,7 +23,7 @@ public class SearchCommand implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("Name/Abbreviation:");
+        System.out.print("Name/Abbreviation: ");
         String key = scanner.nextLine();
         
         Stock stock;

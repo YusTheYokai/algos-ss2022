@@ -36,11 +36,11 @@ public class LoadCommand implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("Relative path to file:");
+        System.out.print("Relative path to file (____.json): ");
         String path = scanner.nextLine();
 
         try {
-            List<String> lines = Files.readAllLines(Path.of(path));
+            List<String> lines = Files.readAllLines(Path.of(path + ".json"));
             GsonHashtableWrapper wrapper = gson.fromJson(String.join("", lines), GsonHashtableWrapper.class);
             setAbbrHashtable.accept(wrapper.getAbbrHashtable());
             setStockHashtable.accept(wrapper.getStockHashtable());

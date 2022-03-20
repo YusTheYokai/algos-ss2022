@@ -35,7 +35,7 @@ public class SaveCommand implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("New file name (extention excluded):");
+        System.out.print("New file name (____.json): ");
         String filename = scanner.nextLine();
         String json = gson.toJson(new GsonHashtableWrapper(abbrHashtable, stockHashtable));
 

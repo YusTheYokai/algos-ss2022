@@ -5,6 +5,11 @@ import java.util.Scanner;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.indvd00m.ascii.render.Render;
+import com.indvd00m.ascii.render.api.ICanvas;
+import com.indvd00m.ascii.render.api.IContextBuilder;
+import com.indvd00m.ascii.render.api.IRender;
+import com.indvd00m.ascii.render.elements.PseudoText;
 
 import at.technikumwien.hashtable.command.AddCommand;
 import at.technikumwien.hashtable.command.DelCommand;
@@ -25,9 +30,17 @@ public class Main {
     private static boolean quit = false;
 
     public static void main(String[] args) {
+        IRender render = new Render();
+        IContextBuilder builder = render.newBuilder();
+        builder.width(80).height(15);
+        builder.element(new PseudoText("Stocktable"));
+        ICanvas canvas = render.render(builder.build());
+        System.out.println(canvas.getText());
+
         final Scanner scanner = new Scanner(System.in);
 
         while (!quit) {
+            System.out.print("\nCommand: ");
             Runnable command = new UnknownCommand();
             String input = scanner.nextLine();
             if (input.equalsIgnoreCase("add")) {
