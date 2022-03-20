@@ -25,7 +25,7 @@ public class SearchCommand implements Runnable {
     public void run() {
         System.out.print("Name/Abbreviation: ");
         String key = scanner.nextLine();
-        
+
         Stock stock;
         String abbr = abbrHashtable.get(key);
         if (abbr == null) {
@@ -33,13 +33,16 @@ public class SearchCommand implements Runnable {
         } else {
             stock = stockHashtable.get(abbr);
         }
-        
+
         if (stock == null) {
             System.err.println("No such stock");
             return;
         }
 
-        System.out.println(stock.getHistories().get(0));
+        if (stock.getHistories().isEmpty()) {
+            System.out.println("No entries");
+        } else {
+            System.out.println(stock.getHistories().get(0));
+        }
     }
-    
 }
