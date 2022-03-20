@@ -32,7 +32,12 @@ public class DelCommand implements Runnable {
 
         String abbr = abbrHashtable.delete(key);
         if (abbr == null) {
-            abbrHashtable.delete(stockHashtable.delete(key).getName());
+            Stock s = stockHashtable.delete(key);
+            if (s == null) {
+                System.err.println("No such stock");
+            } else {
+                abbrHashtable.delete(stockHashtable.delete(key).getName());
+            }
         } else {
             stockHashtable.delete(abbr);
         }
