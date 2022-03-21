@@ -6,8 +6,8 @@
          1. [**Datenstruktur**](#datenstruktur)
          2. [**Hashfunktion**](#hashfunktion)
       2. [Aufwandsabschätzung](#aufwandsabschätzung)
-      3. [Allgemeint nach Big O notation](#allgemeint-nach-big-o-notation)
-      4. [bei 1000 Einträgen](#bei-1000-einträgen)
+         1. [Allgemeint nach Big O notation](#allgemeint-nach-big-o-notation)
+         2. [bei 1000 Einträgen](#bei-1000-einträgen)
 
 ## Hashtabelle
 ### Beschreibung der Datenstruktur und Hashfunktion
