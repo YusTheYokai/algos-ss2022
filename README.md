@@ -6,7 +6,7 @@
          1. [**Datenstruktur**](#datenstruktur)
          2. [**Hashfunktion**](#hashfunktion)
       2. [Aufwandsabschätzung](#aufwandsabschätzung)
-         1. [Allgemeint nach Big O notation](#allgemeint-nach-big-o-notation)
+         1. [Allgemeint nach Big O notation](#allgemein-nach-big-o-notation)
          2. [bei 1000 Einträgen](#bei-1000-einträgen)
 
 ## Hashtabelle
@@ -25,7 +25,7 @@ Da die Hashtabelle anhand Generics generisch gestaltet ist wird Javas eigene Has
 ![Java String Hash](https://raw.githubusercontent.com/YusTheYokai/algos-ss2022/f4c57671622945e60e405454546905b243cd5869/src/main/resources/javaStringHash.png)
 
 ### Aufwandsabschätzung
-#### **Allgemeint nach Big O notation**
+#### **Allgemein nach Big O notation**
 
 | Aktion   | Hashtable | Array  | LinkedList  |
 |----------|-----------|--------|-------------|
