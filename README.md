@@ -27,11 +27,11 @@ Da die Hashtabelle anhand Generics generisch gestaltet ist wird Javas eigene Has
 ### Aufwandsabschätzung
 #### **Allgemeint nach Big O notation**
 
-| Aktion   | Hashtable | Array  |  LinkedList |
+| Aktion   | Hashtable | Array  | LinkedList  |
 |----------|-----------|--------|-------------|
-| Einfügen | $O(1)$    | $O(n)$ | $O(1)$      |
-| Suchen   | $O(1)$    | $O(n)$ | $O(n)$      |
-| Löschen  | $O(1)$    | $O(n)$ | $O(1)$      |
+| Einfügen | O(1)      | O(n)   | O(1)        |
+| Suchen   | O(1)      | O(n)   | O(n)        |
+| Löschen  | O(1)      | O(n)   | O(1)        |
 
 #### **bei 1000 Einträgen**
 
@@ -39,6 +39,6 @@ Aufwand für Sondierung: `1/(1-alpha)`. Bei einer Größe von 2003 ergibt die Re
 
 | Aktion   | Hashtable |
 |----------|-----------|
-| Einfügen | $O(2)$    |
-| Suchen   | $O(2)$    |
-| Löschen  | $O(2)$    |
+| Einfügen | O(2)      |
+| Suchen   | O(2)      |
+| Löschen  | O(2)      |
