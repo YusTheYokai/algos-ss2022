@@ -1,7 +1,6 @@
 package at.technikumwien.treecheck;
 
 import java.util.List;
-import java.util.Map.Entry;
 
 public class Tree {
 
@@ -148,5 +147,39 @@ public class Tree {
         final int bal = node.bal();
         final boolean violation = bal > 1;
         System.out.println("bal(" + node.getValue() + ") = " + bal + (violation ? " (AVL violation!)" : ""));
+    }
+    
+    public boolean isSubtree(Tree subtree) {
+        return isSubtreeTraverse(root, subtree.root);
+    }
+
+    private boolean isSubtreeTraverse(Node n1, Node n2) {
+        if (n2 == null) {
+            return true;
+        }
+        
+        if (n1 == null) {
+            return false;
+        }
+        
+        if (equalsTraverse(n1, n2)) {
+            return true;
+        }
+
+        return isSubtreeTraverse(n1.getLeft(), n2) || isSubtreeTraverse(n1.getRight(), n2);
+    }
+
+    private boolean equalsTraverse(Node n1, Node n2) {
+        if (n1 == null && n2 == null) {
+            return true;
+        } 
+        
+        if (n1 == null || n2 == null) {
+            return false;
+        }
+
+        return n1.getValue() == n2.getValue() &&
+                equalsTraverse(n1.getLeft(), n2.getLeft()) &&
+                equalsTraverse(n1.getRight(), n2.getRight());
     }
 }
