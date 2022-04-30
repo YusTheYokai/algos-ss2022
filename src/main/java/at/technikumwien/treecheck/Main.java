@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Main {
 
@@ -16,7 +17,6 @@ public class Main {
         } else if (args.length > 2) {
             error("A maximum of two paths to a file containing a tree is allowed!", 2);
         }
-        
         
         try {
             List<String> lines = Files.readAllLines(Paths.get(args[0]));
@@ -31,9 +31,18 @@ public class Main {
                 lines = Files.readAllLines(Paths.get(args[1]));
                 integers = lines.stream().map(Integer::parseInt).toList();
                 Tree subtree = new Tree(integers);
-                System.out.println(tree.isSubtree(subtree));
+
+                if (subtree.count() == 1) {
+                    var value = subtree.getRoot().getValue();
+                    var result = tree.search(value);
+                    System.out.println(value + " found " + result.getSecond().stream().map(i -> i.toString()).collect(Collectors.joining(", "))); // NOSONAR
+                } else {
+                    // var result = subtree.subtreeOf(tree);
+                    // System.out.println(result.getFirst());
+
+                    System.out.println(tree.contains(subtree));
+                }
             }
-            
         } catch (IOException e) {
             error("File could not be read!", 3);
        } catch (NumberFormatException e) {

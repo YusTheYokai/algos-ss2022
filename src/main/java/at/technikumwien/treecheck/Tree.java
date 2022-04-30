@@ -1,8 +1,13 @@
 package at.technikumwien.treecheck;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Tree {
+
+    private static final Pair<Boolean, List<Integer>> SEARCH_NOT_FOUND = new Pair<>(false, new ArrayList<>());
+    private static final Pair<Boolean, Node> SUBTREE_NOT_FOUND = new Pair<>(false, null);
 
     private Node root;
 
@@ -110,24 +115,50 @@ public class Tree {
         return Math.max(Math.max(maxRight, maxLeft), node.getValue());
     }
 
+    // Summe
+
+    private float sum() {
+        return sumTraverse(root);
+    }
+
+    private float sumTraverse(Node node) {
+        float left = 0f;
+        float right = 0f;
+
+        if (node.getRight() != null) {
+            right = sumTraverse(node.getRight());
+        }
+        if (node.getLeft() != null) {
+            left = sumTraverse(node.getLeft());
+        }
+
+        return node.getValue() + left + right;
+    }
+
+    // Anzahl
+
+    public int count() {
+        return countTraverse(root);
+    }
+
+    private int countTraverse(Node node) {
+        int left = 0;
+        int right = 0;
+
+        if (node.getRight() != null) {
+            right = countTraverse(node.getRight());
+        }
+        if (node.getLeft() != null) {
+            left = countTraverse(node.getLeft());
+        }
+
+        return 1 + left + right;
+    }
+
     // Durchschnitt
 
     public float avg() {
-        Pair<Float, Integer> pair = new Pair<>(0f, 0);
-        avgTraverse(root, pair);
-        return pair.getFirst() / pair.getSecond();
-    }
-
-    private void avgTraverse(Node node, Pair<Float, Integer> pair) {
-        if (node.getRight() != null) {
-            avgTraverse(node.getRight(), pair);
-        }
-        if (node.getLeft() != null) {
-            avgTraverse(node.getLeft(), pair);
-        }
-
-        pair.setFirst(pair.getFirst() + node.getValue());
-        pair.setSecond(pair.getSecond() + 1);
+        return sum() / count();
     }
 
     // Ausgeben
@@ -149,8 +180,128 @@ public class Tree {
         System.out.println("bal(" + node.getValue() + ") = " + bal + (violation ? " (AVL violation!)" : ""));
     }
     
-    public boolean isSubtree(Tree subtree) {
-        return isSubtreeTraverse(root, subtree.root);
+    // Search
+
+    public Pair<Boolean, List<Integer>> search(int value) {
+        return search(value, root, SEARCH_NOT_FOUND);
+    }
+
+    private Pair<Boolean, List<Integer>> search(int value, Node node, Pair<Boolean, List<Integer>> p) {
+        p.getSecond().add(node.getValue());
+
+        if (node.getValue() == value) {
+            p.setFirst(true);
+            return p;
+        }
+
+        var resultLeft = SEARCH_NOT_FOUND;
+        var resultRight = SEARCH_NOT_FOUND;
+
+        if (node.getLeft() != null) {
+            resultLeft = search(value, node.getLeft(), copyPair(p));
+        }
+        if (node.getRight() != null) {
+            resultRight = search(value, node.getRight(), copyPair(p));
+        }
+
+        if (Boolean.TRUE.equals(resultLeft.getFirst())) {
+            return resultLeft;
+        } else if (Boolean.TRUE.equals(resultRight.getFirst())) {
+            return resultRight;
+        } else {
+            return SEARCH_NOT_FOUND;
+        }
+    }
+
+    private Pair<Boolean, List<Integer>> copyPair(Pair<Boolean, List<Integer>> pair) {
+        List<Integer> copiedList = new ArrayList<>();
+        copiedList.addAll(pair.getSecond());
+        return new Pair<>(pair.getFirst().booleanValue(), copiedList);
+    }
+
+    public boolean contains(Tree subtree) {
+        return contains(subtree.root, root);
+    }
+
+    private boolean contains(Node subtreeNode, Node parentTreeNode) {
+        Node found = containsTraverse(subtreeNode.getValue(), parentTreeNode);
+
+        if (found == null) {
+            return false;
+        } else if (subtreeNode.getLeft() == null && subtreeNode.getRight() == null) {
+            return true;
+        }
+
+        boolean left = false;
+        boolean right = false;
+
+        if (subtreeNode.getLeft() != null && found.getLeft() != null) {
+            left = contains(subtreeNode.getLeft(), found.getLeft());
+        }
+        if (subtreeNode.getRight() != null && found.getRight() != null) {
+            right = contains(subtreeNode.getRight(), found.getRight());
+        }
+
+        return left || right;
+    }
+
+    private Node containsTraverse(int value, Node node) {
+        if (node.getValue() == value) {
+            return node;
+        }
+
+        Node resultLeft = null;
+        Node resultRight = null;
+
+        if (node.getLeft() != null) {
+            resultLeft = containsTraverse(value, node.getLeft());
+        }
+        if (node.getRight() != null) {
+            resultRight = containsTraverse(value, node.getRight());
+        }
+
+        if (resultLeft != null) {
+            return resultLeft;
+        } else if (resultRight != null) {
+            return resultRight;
+        } else {
+            return null;
+        }
+    }
+
+    // Subtree
+
+    public Pair<Boolean, List<Integer>> subtreeOf(Tree parentTree) {
+        var subtreeFlat = flat();
+        var parentTreeFlat = parentTree.flat();
+        parentTreeFlat.removeIf(i -> !subtreeFlat.contains(i));
+
+        if (parentTreeFlat.size() != subtreeFlat.size()) {
+            return new Pair<>(false, Collections.emptyList());
+        }
+
+        for (int i = 0; i < subtreeFlat.size(); i++) {
+            if (!subtreeFlat.get(i).equals(parentTreeFlat.get(i)) ) {
+                return new Pair<>(false, Collections.emptyList());
+            }
+        }
+        return new Pair<>(true, Collections.emptyList());
+    }
+
+    private List<Integer> flat() {
+        List<Integer> list = new ArrayList<>();
+        flatTraverse(root, list);
+        return list;
+    }
+
+    private void flatTraverse(Node node, List<Integer> list) {
+        if (node.getLeft() != null) {
+            flatTraverse(node.getLeft(), list);
+        }
+        if (node.getRight() != null) {
+            flatTraverse(node.getRight(), list);
+        }
+        list.add(node.getValue());
     }
 
     private boolean isSubtreeTraverse(Node n1, Node n2) {
@@ -181,5 +332,13 @@ public class Tree {
         return n1.getValue() == n2.getValue() &&
                 equalsTraverse(n1.getLeft(), n2.getLeft()) &&
                 equalsTraverse(n1.getRight(), n2.getRight());
+    }
+
+    // //////////////////////////////////////////////////////////////////////////
+    // Getter
+    // //////////////////////////////////////////////////////////////////////////
+
+    public Node getRoot() {
+        return root;
     }
 }
