@@ -6,8 +6,8 @@
          1. [**Datenstruktur**](#datenstruktur)
          2. [**Hashfunktion**](#hashfunktion)
       2. [Aufwandsabschätzung](#aufwandsabschätzung)
-      3. [Allgemeint nach Big O notation](#allgemeint-nach-big-o-notation)
-      4. [bei 1000 Einträgen](#bei-1000-einträgen)
+         1. [Allgemein nach Big O notation](#allgemein-nach-big-o-notation)
+         2. [bei 1000 Einträgen](#bei-1000-einträgen)
    2. [Treecheck](#treecheck)
       1. [Beschreibung der rekursiven Funktionen](#beschreibung-der-rekursiven-funktionen)
       2. [Aufwandsabschätzung](#aufwandsabschätzung-1)
@@ -28,15 +28,15 @@ Da die Hashtabelle anhand Generics generisch gestaltet ist wird Javas eigene Has
 ![Java String Hash](https://raw.githubusercontent.com/YusTheYokai/algos-ss2022/f4c57671622945e60e405454546905b243cd5869/src/main/resources/javaStringHash.png)
 
 ### Aufwandsabschätzung
-### Allgemeint nach Big O notation
+#### **Allgemein nach Big O notation**
 
-| Aktion   | Hashtable | Array  |  LinkedList |
+| Aktion   | Hashtable | Array  | LinkedList  |
 |----------|-----------|--------|-------------|
-| Einfügen | $O(1)$    | $O(n)$ | $O(1)$      |
-| Suchen   | $O(1)$    | $O(n)$ | $O(n)$      |
-| Löschen  | $O(1)$    | $O(n)$ | $O(1)$      |
+| Einfügen | O(1)      | O(n)   | O(1)        |
+| Suchen   | O(1)      | O(n)   | O(n)        |
+| Löschen  | O(1)      | O(n)   | O(1)        |
 
-### bei 1000 Einträgen
+#### **bei 1000 Einträgen**
 
 Aufwand für Sondierung: `1/(1-alpha)`. Bei einer Größe von 2003 ergibt die Rechnung `1/(1-(1000/2003))` ungefähr 2.
 
