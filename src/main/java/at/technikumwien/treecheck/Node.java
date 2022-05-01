@@ -1,5 +1,8 @@
 package at.technikumwien.treecheck;
 
+/**
+ * Node eines Trees.
+ */
 public class Node {
 
     private int value;
@@ -18,11 +21,20 @@ public class Node {
     // Methoden
     // //////////////////////////////////////////////////////////////////////////
 
-    public int bal() {
+    /**
+     * Berechnet die Balance der Node.
+     * @return die Balance
+     */
+    public int balance() {
         return Math.abs(height(left) - height(right));
     }
 
-    private int height(Node node) {
+    /**
+     * Berechnet die Balance einer Node.
+     * @param node die Node
+     * @return die Balance
+     */
+    private static int height(Node node) {
         if (node == null) {
             return 0;
         } else {
