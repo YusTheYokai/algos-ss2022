@@ -4,7 +4,7 @@
   <groupId>at.technikumwien</groupId>
   <artifactId>algos-ss2022</artifactId>
   <name>algos</name>
-  <version>0.1</version>
+  <version>0.2</version>
   <build>
     <pluginManagement>
       <plugins>
