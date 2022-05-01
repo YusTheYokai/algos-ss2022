@@ -8,6 +8,9 @@
       2. [Aufwandsabschätzung](#aufwandsabschätzung)
       3. [Allgemeint nach Big O notation](#allgemeint-nach-big-o-notation)
       4. [bei 1000 Einträgen](#bei-1000-einträgen)
+   2. [Treecheck](#treecheck)
+      1. [Beschreibung der rekursiven Funktionen](#beschreibung-der-rekursiven-funktionen)
+      2. [Aufwandsabschätzung](#aufwandsabschätzung-1)
 
 ## Hashtabelle
 ### Beschreibung der Datenstruktur und Hashfunktion
@@ -42,3 +45,25 @@ Aufwand für Sondierung: `1/(1-alpha)`. Bei einer Größe von 2003 ergibt die Re
 | Einfügen | $O(2)$    |
 | Suchen   | $O(2)$    |
 | Löschen  | $O(2)$    |
+
+## Treecheck
+### Beschreibung der rekursiven Funktionen
+Es gibt folgende rekursive Methoden:
+
+- Node
+  - height
+- Tree
+  - addTraverse
+  - isAvlTraverse
+  - minTraverse 
+  - maxTraverse
+  - sumTraverse
+  - countTraverse
+  - search
+  - contains
+  - containsTraverse
+
+Generell arbeiten alle Methoden anhand des gleichen Prinzips, die Methoden werden für die linke und für die rechte Node rekursiv aufgerufen.
+
+### Aufwandsabschätzung
+Anhand dessen, dass die Methoden für Links und für Rechts rekursiv aufgerufen werden handelt es sich um $O(log(n))$.
