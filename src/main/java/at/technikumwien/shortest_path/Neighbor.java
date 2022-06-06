@@ -1,19 +1,17 @@
 package at.technikumwien.shortest_path;
 
-import java.util.ArrayList;
-import java.util.List;
+public class Neighbor {
 
-public class Line {
-
-    private final String name;
-    private final List<Commute> commutes = new ArrayList<>();
+    private final int cost;
+    private final Node to;
 
     // //////////////////////////////////////////////////////////////////////////
     // Init
     // //////////////////////////////////////////////////////////////////////////
 
-    public Line(String name) {
-        this.name = name;
+    public Neighbor(int cost, Node to) {
+        this.cost = cost;
+        this.to = to;
     }
 
     // //////////////////////////////////////////////////////////////////////////
@@ -21,19 +19,28 @@ public class Line {
     // //////////////////////////////////////////////////////////////////////////
 
     @Override
-    public int hashCode() { // NOSONAR
-        return name.hashCode();
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+
+        return hashCode() == obj.hashCode();
+    }
+
+    @Override
+    public int hashCode() {
+        return to.hashCode();
     }
 
     // //////////////////////////////////////////////////////////////////////////
-    // Getter und Setter
+    // Getter
     // //////////////////////////////////////////////////////////////////////////
 
-    public String getName() {
-        return name;
+    public int getCost() {
+        return cost;
     }
 
-    public List<Commute> getCommutes() {
-        return commutes;
+    public Node getTo() {
+        return to;
     }
 }
