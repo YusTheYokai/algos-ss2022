@@ -3,7 +3,7 @@ package at.technikumwien.shortest_path;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Node implements Comparable<Node> {
+public class Station implements Comparable<Station> {
 
     private final String name;
     // TODO: Anstatt mehrere Linien in einer Node zu speichern gibt es für jede Linie die eine Station anfährt eine Node
@@ -11,14 +11,14 @@ public class Node implements Comparable<Node> {
     private final Set<Line> lines = new HashSet<>();
     private int cost = Integer.MAX_VALUE;
     private Set<Neighbor> neighbors = new HashSet<>();
-    private Pair<Node, Line> previous;
+    private Neighbor previous;
     private boolean visited = false;
 
     // //////////////////////////////////////////////////////////////////////////
     // Init
     // //////////////////////////////////////////////////////////////////////////
 
-    public Node(String name, Line line) {
+    public Station(String name, Line line) {
         this.name = name;
         lines.add(line);
     }
@@ -42,7 +42,7 @@ public class Node implements Comparable<Node> {
     }
 
     @Override
-    public int compareTo(Node o) {
+    public int compareTo(Station o) {
         if (visited) {
             return Integer.MAX_VALUE;
         } else {
@@ -74,11 +74,11 @@ public class Node implements Comparable<Node> {
         return neighbors;
     }
 
-    public Pair<Node, Line> getPrevious() {
+    public Neighbor getPrevious() {
         return previous;
     }
 
-    public void setPrevious(Pair<Node, Line> previous) {
+    public void setPrevious(Neighbor previous) {
         this.previous = previous;
     }
 

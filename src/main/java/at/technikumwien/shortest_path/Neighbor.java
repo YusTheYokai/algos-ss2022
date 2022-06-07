@@ -3,15 +3,17 @@ package at.technikumwien.shortest_path;
 public class Neighbor {
 
     private final int cost;
-    private final Node node;
+    private final Station station;
+    private final Line line;
 
     // //////////////////////////////////////////////////////////////////////////
     // Init
     // //////////////////////////////////////////////////////////////////////////
 
-    public Neighbor(int cost, Node node) {
+    public Neighbor(int cost, Station station, Line line) {
         this.cost = cost;
-        this.node = node;
+        this.station = station;
+        this.line = line;
     }
 
     // //////////////////////////////////////////////////////////////////////////
@@ -29,7 +31,7 @@ public class Neighbor {
 
     @Override
     public int hashCode() {
-        return node.hashCode();
+        return station.hashCode();
     }
 
     // //////////////////////////////////////////////////////////////////////////
@@ -40,7 +42,11 @@ public class Neighbor {
         return cost;
     }
 
-    public Node getNode() {
-        return node;
+    public Station getStation() {
+        return station;
+    }
+
+    public Line getLine() {
+        return line;
     }
 }

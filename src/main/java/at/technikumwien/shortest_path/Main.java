@@ -6,10 +6,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -20,69 +18,68 @@ public class Main {
     public static void main(String[] args) {
         try {
             // TODO: Auf Command Line anpassen
-            Map<String, Node> graph = getGraph("src/main/resources/shortest_path/public_transport_system");
-            Node start = graph.get("Praterstern");
-            Node end = graph.get("Oberdorfstrasse");
+            Map<String, Station> graph = getGraph("src/main/resources/shortest_path/public_transport_system");
+            // Station start = graph.get("Floridsdorf");
+            // Station end = graph.get("Leberberg");
+
+            Station start = graph.get("Wallrissstrasse");
+            Station end = graph.get("Columbusplatz");
+
+            // Station start = graph.get("Hausfeldstrasse");
+            // Station end = graph.get("Tesarekplatz");
 
             start.setCost(0);
-            var nodes = new ArrayList<>(graph.values());
-            Collections.sort(nodes);
+            var stations = new ArrayList<>(graph.values());
+            Collections.sort(stations);
 
-            for (int i = 0; i < nodes.size(); i++) {
-                nodes.get(i).setVisited(true);
-                for (Neighbor neighbor : nodes.get(i).getNeighbors()) {
-                    if (!neighbor.getNode().isVisited()) {
-                        int potential = nodes.get(i).getCost() + neighbor.getCost();
-                        Line changeTo = null;
+            for (int i = 0; i < stations.size(); i++) {
+                stations.get(i).setVisited(true);
+                for (Neighbor neighbor : stations.get(i).getNeighbors()) {
+                    if (!neighbor.getStation().isVisited()) {
+                        int potential = stations.get(i).getCost() + neighbor.getCost();
 
-                        // es kann sein, dass umgestiegen werden muss
-                        if (nodes.get(i).getPrevious() != null) {
-                            Set<Line> intersectingLines = new HashSet<>(neighbor.getNode().getLines());
-                            intersectingLines.retainAll(nodes.get(i).getPrevious().getFirst().getLines());
-    
-                            // es gibt keine Linie, die beide Station anfährt
-                            // das heißt, dass ein Umstieg stattfinden muss
-                            if (intersectingLines.isEmpty()) {
-                                potential += 5;
-                                List<Line> lineChangeTo = new ArrayList<>(neighbor.getNode().getLines());
-                                lineChangeTo.retainAll(nodes.get(i).getLines());
-                                changeTo = lineChangeTo.get(0);
-                            }
+                        if (stations.get(i).getPrevious() != null && stations.get(i).getPrevious().getLine() != neighbor.getLine()) {
+                            potential += 5;
                         }
 
-                        if (potential < neighbor.getNode().getCost()) {
-                            neighbor.getNode().setCost(potential);
-                            neighbor.getNode().setPrevious(new Pair<>(nodes.get(i), changeTo));
+                        if (potential < neighbor.getStation().getCost()) {
+                            neighbor.getStation().setCost(potential);
+                            neighbor.getStation().setPrevious(neighborOfNeighborViaStation(neighbor, stations.get(i)));
                         }
                     }
                 }
 
-                Collections.sort(nodes);
+                Collections.sort(stations);
             }
 
-            List<Pair<Node, Line>> route = new ArrayList<>();
-            route.add(new Pair<>(end, null));
-            Pair<Node, Line> temp = end.getPrevious();
+            List<Neighbor> route = new ArrayList<>();
+            route.add(new Neighbor(0, end, null));
+            Neighbor temp = end.getPrevious();
 
             while (temp != null) {
                 route.add(temp);
-                temp = temp.getFirst().getPrevious();
+                temp = temp.getStation().getPrevious();
             }
             Collections.reverse(route);
-            route.forEach(pair -> {
-                if (pair.getFirst().equals(start)) {
-                    List<Line> startLine = new ArrayList<>(start.getLines());
-                    startLine.retainAll(route.get(1).getFirst().getLines());
-                    System.out.printf("--- line %s ---%n", startLine.get(0).getName());
-                    System.out.println("   " + pair.getFirst().getName());
+
+            Line current = null;
+            for (int i = 0; i < route.size(); i++) {
+                var neighbor = route.get(i);
+                if (neighbor.getStation().equals(start)) {
+                    // List<Line> startLine = new ArrayList<>(start.getLines());
+                    // startLine.retainAll(route.get(1).getFirst().getLines());
+                    current = neighbor.getLine();
+                    System.out.printf("--- line %s ---%n", neighbor.getLine().getName());
+                    System.out.println("   " + neighbor.getStation().getName());
                 } else {
-                    System.out.printf("%02d %s%n", pair.getFirst().getCost(), pair.getFirst().getName());
-                    if (pair.getSecond() != null) {
-                        System.out.printf("--- line change to %s ---%n", pair.getSecond().getName());
-                        System.out.printf("%02d %s%n", pair.getFirst().getCost() + 5, pair.getFirst().getName());
+                    System.out.printf("%02d %s%n", neighbor.getStation().getCost(), neighbor.getStation().getName());
+                    if (neighbor.getLine() != null && neighbor.getLine() != current) {
+                        current = neighbor.getLine();
+                        System.out.printf("--- line change to %s ---%n", current.getName());
+                        System.out.printf("%02d %s%n", neighbor.getStation().getCost() + 5, neighbor.getStation().getName());
                     }
                 }
-            });
+            }
         } catch (IOException | NumberFormatException e) {
             e.printStackTrace();
         }
@@ -113,34 +110,38 @@ public class Main {
         return lines;
     }
 
-    private static Map<String, Node> getGraph(String filePath) throws IOException {
+    private static Map<String, Station> getGraph(String filePath) throws IOException {
         List<Line> lines = getLines(filePath);
-        Map<String, Node> nodes = new HashMap<>();
+        Map<String, Station> stations = new HashMap<>();
 
         for (Line line : lines) {
             for (Commute commute : line.getCommutes()) {
-                Node s1 = nodes.get(commute.getStation1());
-                Node s2 = nodes.get(commute.getStation2());
+                Station s1 = stations.get(commute.getStation1());
+                Station s2 = stations.get(commute.getStation2());
 
                 if (s1 == null) {
-                    s1 = new Node(commute.getStation1(), line);
-                    nodes.put(commute.getStation1(), s1);
+                    s1 = new Station(commute.getStation1(), line);
+                    stations.put(commute.getStation1(), s1);
                 } else {
                     s1.getLines().add(line);
                 }
 
                 if (s2 == null) {
-                    s2 = new Node(commute.getStation2(), line);
-                    nodes.put(commute.getStation2(), s2);
+                    s2 = new Station(commute.getStation2(), line);
+                    stations.put(commute.getStation2(), s2);
                 } else {
                     s2.getLines().add(line);
                 }
 
-                s1.getNeighbors().add(new Neighbor(commute.getTime(), s2));
-                s2.getNeighbors().add(new Neighbor(commute.getTime(), s1));
+                s1.getNeighbors().add(new Neighbor(commute.getTime(), s2, line));
+                s2.getNeighbors().add(new Neighbor(commute.getTime(), s1, line));
             }
         }
 
-        return nodes;
+        return stations;
+    }
+
+    private static Neighbor neighborOfNeighborViaStation(Neighbor neighbor, Station station) {
+        return neighbor.getStation().getNeighbors().stream().filter(n -> n.getStation() == station).findFirst().orElseThrow();
     }
 }
