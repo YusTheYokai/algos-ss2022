@@ -11,7 +11,7 @@ public class Node implements Comparable<Node> {
     private final Set<Line> lines = new HashSet<>();
     private int cost = Integer.MAX_VALUE;
     private Set<Neighbor> neighbors = new HashSet<>();
-    private Node previous;
+    private Pair<Node, Line> previous;
     private boolean visited = false;
 
     // //////////////////////////////////////////////////////////////////////////
@@ -74,11 +74,11 @@ public class Node implements Comparable<Node> {
         return neighbors;
     }
 
-    public Node getPrevious() {
+    public Pair<Node, Line> getPrevious() {
         return previous;
     }
 
-    public void setPrevious(Node previous) {
+    public void setPrevious(Pair<Node, Line> previous) {
         this.previous = previous;
     }
 

@@ -6,8 +6,10 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,8 +21,8 @@ public class Main {
         try {
             // TODO: Auf Command Line anpassen
             Map<String, Node> graph = getGraph("src/main/resources/shortest_path/public_transport_system");
-            Node start = graph.get("Westbahnhof");
-            Node end = graph.get("Rodaun");
+            Node start = graph.get("Praterstern");
+            Node end = graph.get("Oberdorfstrasse");
 
             start.setCost(0);
             var nodes = new ArrayList<>(graph.values());
@@ -29,15 +31,28 @@ public class Main {
             for (int i = 0; i < nodes.size(); i++) {
                 nodes.get(i).setVisited(true);
                 for (Neighbor neighbor : nodes.get(i).getNeighbors()) {
-                    if (!neighbor.getTo().isVisited()) {
+                    if (!neighbor.getNode().isVisited()) {
                         int potential = nodes.get(i).getCost() + neighbor.getCost();
-                        if (neighbor.isLineChange()) {
-                            potential += 5;
+                        Line changeTo = null;
+
+                        // es kann sein, dass umgestiegen werden muss
+                        if (nodes.get(i).getPrevious() != null) {
+                            Set<Line> intersectingLines = new HashSet<>(neighbor.getNode().getLines());
+                            intersectingLines.retainAll(nodes.get(i).getPrevious().getFirst().getLines());
+    
+                            // es gibt keine Linie, die beide Station anfährt
+                            // das heißt, dass ein Umstieg stattfinden muss
+                            if (intersectingLines.isEmpty()) {
+                                potential += 5;
+                                List<Line> lineChangeTo = new ArrayList<>(neighbor.getNode().getLines());
+                                lineChangeTo.retainAll(nodes.get(i).getLines());
+                                changeTo = lineChangeTo.get(0);
+                            }
                         }
 
-                        if (potential < neighbor.getTo().getCost()) {
-                            neighbor.getTo().setCost(potential);
-                            neighbor.getTo().setPrevious(nodes.get(i));
+                        if (potential < neighbor.getNode().getCost()) {
+                            neighbor.getNode().setCost(potential);
+                            neighbor.getNode().setPrevious(new Pair<>(nodes.get(i), changeTo));
                         }
                     }
                 }
@@ -45,17 +60,27 @@ public class Main {
                 Collections.sort(nodes);
             }
 
-            List<Node> route = new ArrayList<>();
-            while (end != null) {
-                route.add(end);
-                end = end.getPrevious();
+            List<Pair<Node, Line>> route = new ArrayList<>();
+            route.add(new Pair<>(end, null));
+            Pair<Node, Line> temp = end.getPrevious();
+
+            while (temp != null) {
+                route.add(temp);
+                temp = temp.getFirst().getPrevious();
             }
             Collections.reverse(route);
-            route.forEach(node -> {
-                if (node.equals(start)) {
-                    System.out.println("   " + node.getName());
+            route.forEach(pair -> {
+                if (pair.getFirst().equals(start)) {
+                    List<Line> startLine = new ArrayList<>(start.getLines());
+                    startLine.retainAll(route.get(1).getFirst().getLines());
+                    System.out.printf("--- line %s ---%n", startLine.get(0).getName());
+                    System.out.println("   " + pair.getFirst().getName());
                 } else {
-                    System.out.printf("%02d %s\n", node.getCost(), node.getName());
+                    System.out.printf("%02d %s%n", pair.getFirst().getCost(), pair.getFirst().getName());
+                    if (pair.getSecond() != null) {
+                        System.out.printf("--- line change to %s ---%n", pair.getSecond().getName());
+                        System.out.printf("%02d %s%n", pair.getFirst().getCost() + 5, pair.getFirst().getName());
+                    }
                 }
             });
         } catch (IOException | NumberFormatException e) {
