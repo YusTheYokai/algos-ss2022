@@ -25,20 +25,6 @@ public class Station implements Comparable<Station> {
     // Methoden
     // //////////////////////////////////////////////////////////////////////////
 
-    // @Override
-    // public boolean equals(Object obj) {
-    //     if (obj == null) {
-    //         return false;
-    //     }
-
-    //     return hashCode() == obj.hashCode();
-    // }
-
-    // @Override
-    // public int hashCode() {
-    //     return name.hashCode();
-    // }
-
     @Override
     public int compareTo(Station o) {
         if (visited) {

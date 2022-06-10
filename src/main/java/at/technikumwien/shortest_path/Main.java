@@ -33,18 +33,20 @@ public class Main {
             Collections.sort(stations);
 
             for (int i = 0; i < stations.size(); i++) {
-                stations.get(i).setVisited(true);
-                for (Neighbor neighbor : stations.get(i).getNeighbors()) {
-                    if (!neighbor.getStation().isVisited()) {
-                        int potential = stations.get(i).getCost() + neighbor.getCost();
+                var station = stations.get(i);
 
-                        if (stations.get(i).getPrevious() != null && stations.get(i).getPrevious().getLine() != neighbor.getLine()) {
-                            potential += 5;
+                station.setVisited(true);
+                for (Neighbor neighbor : station.getNeighbors()) {
+                    if (!neighbor.getStation().isVisited()) {
+                        int alt = station.getCost() + neighbor.getCost();
+
+                        if (station.getPrevious() != null && station.getPrevious().getLine() != neighbor.getLine()) {
+                            alt += 5;
                         }
 
-                        if (potential < neighbor.getStation().getCost()) {
-                            neighbor.getStation().setCost(potential);
-                            neighbor.getStation().setPrevious(neighborOfNeighborViaStation(neighbor, stations.get(i)));
+                        if (alt < neighbor.getStation().getCost()) {
+                            neighbor.getStation().setCost(alt);
+                            neighbor.getStation().setPrevious(neighborOfNeighborViaStation(neighbor, station));
                         }
                     }
                 }
@@ -52,41 +54,41 @@ public class Main {
                 Collections.sort(stations);
             }
 
-            System.out.println(end.getName());
-            Neighbor temp = end.getPrevious();
-            while (temp != null) {
-                System.out.println(temp.getStation().getName() + " via " + temp.getLine().getName());
-                temp = temp.getStation().getPrevious();
-            }
-
-            // List<Neighbor> route = new ArrayList<>();
-            // route.add(new Neighbor(0, end, null));
+            // System.out.println(end.getName());
             // Neighbor temp = end.getPrevious();
-
             // while (temp != null) {
-            //     route.add(temp);
+            //     System.out.println(temp.getStation().getName() + " via " + temp.getLine().getName());
             //     temp = temp.getStation().getPrevious();
             // }
-            // Collections.reverse(route);
 
-            // Line current = null;
-            // for (int i = 0; i < route.size(); i++) {
-            //     var neighbor = route.get(i);
-            //     if (neighbor.getStation().equals(start)) {
-            //         // List<Line> startLine = new ArrayList<>(start.getLines());
-            //         // startLine.retainAll(route.get(1).getFirst().getLines());
-            //         current = neighbor.getLine();
-            //         System.out.printf("--- line %s ---%n", neighbor.getLine().getName());
-            //         System.out.println("   " + neighbor.getStation().getName());
-            //     } else {
-            //         System.out.printf("%02d %s%n", neighbor.getStation().getCost(), neighbor.getStation().getName());
-            //         if (neighbor.getLine() != null && neighbor.getLine() != current) {
-            //             current = neighbor.getLine();
-            //             System.out.printf("--- line change to %s ---%n", current.getName());
-            //             System.out.printf("%02d %s%n", neighbor.getStation().getCost() + 5, neighbor.getStation().getName());
-            //         }
-            //     }
-            // }
+            List<Neighbor> route = new ArrayList<>();
+            route.add(new Neighbor(0, end, null));
+            Neighbor temp = end.getPrevious();
+
+            while (temp != null) {
+                route.add(temp);
+                temp = temp.getStation().getPrevious();
+            }
+            Collections.reverse(route);
+
+            Line current = null;
+            for (int i = 0; i < route.size(); i++) {
+                var neighbor = route.get(i);
+                if (neighbor.getStation().equals(start)) {
+                    // List<Line> startLine = new ArrayList<>(start.getLines());
+                    // startLine.retainAll(route.get(1).getFirst().getLines());
+                    current = neighbor.getLine();
+                    System.out.printf("--- line %s ---%n", neighbor.getLine().getName());
+                    System.out.println("   " + neighbor.getStation().getName());
+                } else {
+                    System.out.printf("%02d %s%n", neighbor.getStation().getCost(), neighbor.getStation().getName());
+                    if (neighbor.getLine() != null && neighbor.getLine() != current) {
+                        current = neighbor.getLine();
+                        System.out.printf("--- line change to %s ---%n", current.getName());
+                        System.out.printf("%02d %s%n", neighbor.getStation().getCost() + 5, neighbor.getStation().getName());
+                    }
+                }
+            }
         } catch (IOException | NumberFormatException e) {
             e.printStackTrace();
         }
@@ -149,6 +151,6 @@ public class Main {
     }
 
     private static Neighbor neighborOfNeighborViaStation(Neighbor neighbor, Station station) {
-        return neighbor.getStation().getNeighbors().stream().filter(n -> n.getStation() == station).findFirst().orElseThrow();
+        return neighbor.getStation().getNeighbors().stream().filter(n -> n.getStation() == station && n.getLine() == neighbor.getLine()).findFirst().orElseThrow();
     }
 }
