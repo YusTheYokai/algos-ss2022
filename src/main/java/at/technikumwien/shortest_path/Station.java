@@ -6,8 +6,6 @@ import java.util.Set;
 public class Station implements Comparable<Station> {
 
     private final String name;
-    // TODO: Anstatt mehrere Linien in einer Node zu speichern gibt es für jede Linie die eine Station anfährt eine Node
-    // dann musst beim Erstellen der Verbindungen zwischen den gleichen Station aber verschiedener Linien die Cost von 5 eingestellt werden
     private final Set<Line> lines = new HashSet<>();
     private int cost = Integer.MAX_VALUE;
     private Set<Neighbor> neighbors = new HashSet<>();
@@ -27,19 +25,19 @@ public class Station implements Comparable<Station> {
     // Methoden
     // //////////////////////////////////////////////////////////////////////////
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
+    // @Override
+    // public boolean equals(Object obj) {
+    //     if (obj == null) {
+    //         return false;
+    //     }
 
-        return hashCode() == obj.hashCode();
-    }
+    //     return hashCode() == obj.hashCode();
+    // }
 
-    @Override
-    public int hashCode() {
-        return name.hashCode();
-    }
+    // @Override
+    // public int hashCode() {
+    //     return name.hashCode();
+    // }
 
     @Override
     public int compareTo(Station o) {

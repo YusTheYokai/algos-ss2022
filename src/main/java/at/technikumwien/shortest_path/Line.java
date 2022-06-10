@@ -20,10 +20,10 @@ public class Line {
     // Methoden
     // //////////////////////////////////////////////////////////////////////////
 
-    @Override
-    public int hashCode() { // NOSONAR
-        return name.hashCode();
-    }
+    // @Override
+    // public int hashCode() { // NOSONAR
+    //     return name.hashCode();
+    // }
 
     // //////////////////////////////////////////////////////////////////////////
     // Getter und Setter

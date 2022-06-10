@@ -20,19 +20,19 @@ public class Neighbor {
     // Methoden
     // //////////////////////////////////////////////////////////////////////////
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
+    // @Override
+    // public boolean equals(Object obj) {
+    //     if (obj == null) {
+    //         return false;
+    //     }
 
-        return hashCode() == obj.hashCode();
-    }
+    //     return hashCode() == obj.hashCode();
+    // }
 
-    @Override
-    public int hashCode() {
-        return station.hashCode();
-    }
+    // @Override
+    // public int hashCode() {
+    //     return station.hashCode();
+    // }
 
     // //////////////////////////////////////////////////////////////////////////
     // Getter

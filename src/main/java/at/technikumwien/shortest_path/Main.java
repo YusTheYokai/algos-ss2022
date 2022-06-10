@@ -13,17 +13,17 @@ import java.util.regex.Pattern;
 
 public class Main {
     
-    private static final String STATION_REGEX = "[a-zA-Z0-9\\.\\-/, ]+";
+    private static final String STATION_REGEX = "[a-zA-Z0-9\\.\\-\\/, ]+";
 
     public static void main(String[] args) {
         try {
             // TODO: Auf Command Line anpassen
             Map<String, Station> graph = getGraph("src/main/resources/shortest_path/public_transport_system");
-            // Station start = graph.get("Floridsdorf");
-            // Station end = graph.get("Leberberg");
+            Station start = graph.get("Floridsdorf");
+            Station end = graph.get("Leberberg");
 
-            Station start = graph.get("Wallrissstrasse");
-            Station end = graph.get("Columbusplatz");
+            // Station start = graph.get("Wallrissstrasse");
+            // Station end = graph.get("Columbusplatz");
 
             // Station start = graph.get("Hausfeldstrasse");
             // Station end = graph.get("Tesarekplatz");
@@ -52,34 +52,41 @@ public class Main {
                 Collections.sort(stations);
             }
 
-            List<Neighbor> route = new ArrayList<>();
-            route.add(new Neighbor(0, end, null));
+            System.out.println(end.getName());
             Neighbor temp = end.getPrevious();
-
             while (temp != null) {
-                route.add(temp);
+                System.out.println(temp.getStation().getName() + " via " + temp.getLine().getName());
                 temp = temp.getStation().getPrevious();
             }
-            Collections.reverse(route);
 
-            Line current = null;
-            for (int i = 0; i < route.size(); i++) {
-                var neighbor = route.get(i);
-                if (neighbor.getStation().equals(start)) {
-                    // List<Line> startLine = new ArrayList<>(start.getLines());
-                    // startLine.retainAll(route.get(1).getFirst().getLines());
-                    current = neighbor.getLine();
-                    System.out.printf("--- line %s ---%n", neighbor.getLine().getName());
-                    System.out.println("   " + neighbor.getStation().getName());
-                } else {
-                    System.out.printf("%02d %s%n", neighbor.getStation().getCost(), neighbor.getStation().getName());
-                    if (neighbor.getLine() != null && neighbor.getLine() != current) {
-                        current = neighbor.getLine();
-                        System.out.printf("--- line change to %s ---%n", current.getName());
-                        System.out.printf("%02d %s%n", neighbor.getStation().getCost() + 5, neighbor.getStation().getName());
-                    }
-                }
-            }
+            // List<Neighbor> route = new ArrayList<>();
+            // route.add(new Neighbor(0, end, null));
+            // Neighbor temp = end.getPrevious();
+
+            // while (temp != null) {
+            //     route.add(temp);
+            //     temp = temp.getStation().getPrevious();
+            // }
+            // Collections.reverse(route);
+
+            // Line current = null;
+            // for (int i = 0; i < route.size(); i++) {
+            //     var neighbor = route.get(i);
+            //     if (neighbor.getStation().equals(start)) {
+            //         // List<Line> startLine = new ArrayList<>(start.getLines());
+            //         // startLine.retainAll(route.get(1).getFirst().getLines());
+            //         current = neighbor.getLine();
+            //         System.out.printf("--- line %s ---%n", neighbor.getLine().getName());
+            //         System.out.println("   " + neighbor.getStation().getName());
+            //     } else {
+            //         System.out.printf("%02d %s%n", neighbor.getStation().getCost(), neighbor.getStation().getName());
+            //         if (neighbor.getLine() != null && neighbor.getLine() != current) {
+            //             current = neighbor.getLine();
+            //             System.out.printf("--- line change to %s ---%n", current.getName());
+            //             System.out.printf("%02d %s%n", neighbor.getStation().getCost() + 5, neighbor.getStation().getName());
+            //         }
+            //     }
+            // }
         } catch (IOException | NumberFormatException e) {
             e.printStackTrace();
         }
