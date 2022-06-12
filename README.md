@@ -1,16 +1,23 @@
 # algos-ss2022
 
-1. [algos-ss2022](#algos-ss2022)
-   1. [Hashtabelle](#hashtabelle)
-      1. [Beschreibung der Datenstruktur und Hashfunktion](#beschreibung-der-datenstruktur-und-hashfunktion)
-         1. [**Datenstruktur**](#datenstruktur)
-         2. [**Hashfunktion**](#hashfunktion)
-      2. [Aufwandsabschätzung](#aufwandsabschätzung)
-         1. [Allgemein nach Big O notation](#allgemein-nach-big-o-notation)
-         2. [bei 1000 Einträgen](#bei-1000-einträgen)
-   2. [Treecheck](#treecheck)
-      1. [Beschreibung der rekursiven Funktionen](#beschreibung-der-rekursiven-funktionen)
-      2. [Aufwandsabschätzung](#aufwandsabschätzung-1)
+- [algos-ss2022](#algos-ss2022)
+  - [Hashtabelle](#hashtabelle)
+    - [Beschreibung der Datenstruktur und Hashfunktion](#beschreibung-der-datenstruktur-und-hashfunktion)
+      - [**Datenstruktur**](#datenstruktur)
+      - [**Hashfunktion**](#hashfunktion)
+    - [Aufwandsabschätzung](#aufwandsabschätzung)
+      - [**Allgemein nach Big O notation**](#allgemein-nach-big-o-notation)
+      - [**bei 1000 Einträgen**](#bei-1000-einträgen)
+  - [Treecheck](#treecheck)
+    - [Beschreibung der rekursiven Funktionen](#beschreibung-der-rekursiven-funktionen)
+    - [Aufwandsabschätzung](#aufwandsabschätzung-1)
+  - [Shortest Path](#shortest-path)
+    - [Output Format](#output-format)
+    - [Aufwandsabschätzung](#aufwandsabschätzung-2)
+      - [Datei einlesen](#datei-einlesen)
+      - [Graph erstellen](#graph-erstellen)
+      - [Dijkstra](#dijkstra)
+    - [Laufzeit](#laufzeit)
 
 ## Hashtabelle
 ### Beschreibung der Datenstruktur und Hashfunktion
@@ -67,3 +74,36 @@ Generell arbeiten alle Methoden anhand des gleichen Prinzips, die Methoden werde
 
 ### Aufwandsabschätzung
 Anhand dessen, dass die Methoden für Links und für Rechts rekursiv aufgerufen werden handelt es sich um $O(log(n))$.
+
+## Shortest Path
+### Output Format
+Anhand des Beispieles Floridsdorf nach Roßauer Lände:  
+```
+00 |  U6 | Floridsdorf  
+02 |  U6 | Neue Donau  
+04 |  U6 | Handelskai  
+05 |  U6 | Dresdner Strasse  
+07 |  U6 | Jaegerstrasse  
+08 |  U6 | Spittelau  
++5 | --- | Umstieg von U6 zu U4  
+13 |  U4 | Spittelau  
+14 |  U4 | Friedensbruecke  
+15 |  U4 | Rossauerlaende
+```  
+
+### Aufwandsabschätzung
+#### Datei einlesen
+Es wird über jede Linie, sowie jede Einstationenfahrt iteriert. Dadurch ergibt sich $O(n*m)$, wo $m$ der Anzahl an Einstationenfahrten entspricht. Dadurch, dass nicht gewährleistet ist, dass jede Linie gleich viele Stationen besitzt, rechnen wir auf $O(n)$ runter.
+
+#### Graph erstellen
+Beim Zusammenbauen des Graphens wird über die Commutes (=Einstationenfahrten) iteriert, dementsprechend liegt der Aufwand bei $O(n)$, wenn $n$ der Anzahl von Commutes entspricht.
+
+#### Dijkstra
+Der Dijkstra-Algorithmus hat einen Aufwand von $O(S \log N)$, wobei $S$ der Anzahl der Stationen, und $N$ der Anzahl aller Nachbarn entspricht.
+
+### Laufzeit
+| Datei |von        |nach        |Vertices $S$|Edges $N$|Zeit|$S \log N$|
+|-------|-----------|------------|------------|---------|----|----------|
+|6_60_62|Rodaun     |Valiergasse |77          |160      |1ms |390.788384|
+|  Half |Praterstern|Schottenring|366         |1134     |4ms |2574.26337|
+|  Full |Leopoldau  |Simmering   |671         |2476     |10ms|5243.46215|
