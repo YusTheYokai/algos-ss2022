@@ -28,7 +28,7 @@ public class Main {
             List<Station> stations = new ArrayList<>(graph.values().stream().flatMap(List::stream).toList());
             Collections.sort(stations);
 
-            djikstra(stations);
+            dijkstra(stations);
 
             buildAndPrintRoute(end);
         } catch (IOException | NumberFormatException e) {
@@ -109,7 +109,7 @@ public class Main {
         return station;
     }
 
-    private static void djikstra(List<Station> stations) {
+    private static void dijkstra(List<Station> stations) {
         while (!stations.isEmpty()) {
             Station station = stations.get(0);
             stations.remove(0);
