@@ -4,7 +4,7 @@
   <groupId>at.technikumwien</groupId>
   <artifactId>algos-ss2022</artifactId>
   <name>algos</name>
-  <version>0.2</version>
+  <version>0.3</version>
   <build>
     <pluginManagement>
       <plugins>
@@ -59,7 +59,7 @@
             <configuration>
               <transformers>
                 <transformer>
-                  <mainClass>at.technikumwien.treecheck.Main</mainClass>
+                  <mainClass>at.technikumwien.shortest_path.Main</mainClass>
                 </transformer>
               </transformers>
             </configuration>
