@@ -6,11 +6,10 @@ import java.util.Set;
 public class Station implements Comparable<Station> {
 
     private final String name;
-    private final Set<Line> lines = new HashSet<>();
+    private final Line line;
+    private final Set<Neighbor> neighbors = new HashSet<>();
     private int cost = Integer.MAX_VALUE;
-    private Set<Neighbor> neighbors = new HashSet<>();
-    private Neighbor previous;
-    private boolean visited = false;
+    private Station previous;
 
     // //////////////////////////////////////////////////////////////////////////
     // Init
@@ -18,20 +17,25 @@ public class Station implements Comparable<Station> {
 
     public Station(String name, Line line) {
         this.name = name;
-        lines.add(line);
+        this.line = line;
     }
 
     // //////////////////////////////////////////////////////////////////////////
     // Methoden
     // //////////////////////////////////////////////////////////////////////////
 
+    public void addNeighbor(Neighbor neighbor) {
+        neighbors.add(neighbor);
+    }
+
     @Override
-    public int compareTo(Station o) {
-        if (visited) {
-            return Integer.MAX_VALUE;
-        } else {
-            return Integer.compare(cost, o.cost);
-        }
+    public String toString() {
+        return name;
+    }
+
+    @Override
+    public int compareTo(Station o) { // NOSONAR
+        return Integer.compare(cost, o.cost);
     }
 
     // //////////////////////////////////////////////////////////////////////////
@@ -42,8 +46,8 @@ public class Station implements Comparable<Station> {
         return name;
     }
 
-    public Set<Line> getLines() {
-        return lines;
+    public Line getLine() {
+        return line;
     }
 
     public int getCost() {
@@ -58,19 +62,11 @@ public class Station implements Comparable<Station> {
         return neighbors;
     }
 
-    public Neighbor getPrevious() {
+    public Station getPrevious() {
         return previous;
     }
 
-    public void setPrevious(Neighbor previous) {
+    public void setPrevious(Station previous) {
         this.previous = previous;
-    }
-
-    public boolean isVisited() {
-        return visited;
-    }
-
-    public void setVisited(boolean visited) {
-        this.visited = visited;
     }
 }

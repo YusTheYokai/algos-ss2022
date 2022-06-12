@@ -4,16 +4,14 @@ public class Neighbor {
 
     private final int cost;
     private final Station station;
-    private final Line line;
 
     // //////////////////////////////////////////////////////////////////////////
     // Init
     // //////////////////////////////////////////////////////////////////////////
 
-    public Neighbor(int cost, Station station, Line line) {
+    public Neighbor(int cost, Station station) {
         this.cost = cost;
         this.station = station;
-        this.line = line;
     }
 
     // //////////////////////////////////////////////////////////////////////////
@@ -26,9 +24,5 @@ public class Neighbor {
 
     public Station getStation() {
         return station;
-    }
-
-    public Line getLine() {
-        return line;
     }
 }
