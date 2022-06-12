@@ -14,6 +14,7 @@ import java.util.regex.Pattern;
 public class Main {
 
     private static final String STATION_REGEX = "[a-zA-Z0-9\\.\\-\\/, ]+";
+    private static int neighborCounter = 0;
 
     public static void main(String[] args) {
         try {
@@ -27,10 +28,15 @@ public class Main {
 
             List<Station> stations = new ArrayList<>(graph.values().stream().flatMap(List::stream).toList());
             Collections.sort(stations);
+            int stationCounter = stations.size();
 
+            long startTime = System.currentTimeMillis();
             dijkstra(stations);
+            long endTime = System.currentTimeMillis();
 
             buildAndPrintRoute(end);
+            System.out.printf("%n%nDijkstra hat %d ms gebraucht.%n", endTime - startTime); // NOSONAR
+            System.out.printf("Stationen (Vertices): %d - Nachbarn (Edges): %d%n", stationCounter, neighborCounter); // NOSONAR
         } catch (IOException | NumberFormatException e) {
             e.printStackTrace();
         }
@@ -71,6 +77,7 @@ public class Main {
 
                 s1.getNeighbors().add(new Neighbor(commute.getTime(), s2));
                 s2.getNeighbors().add(new Neighbor(commute.getTime(), s1));
+                neighborCounter += 2;
             }
         }
 
@@ -96,6 +103,7 @@ public class Main {
                 list.forEach(s -> {
                     s.addNeighbor(new Neighbor(5, station));
                     station.addNeighbor(new Neighbor(5, s));
+                    neighborCounter += 2;
                 });
             }
         } else {
